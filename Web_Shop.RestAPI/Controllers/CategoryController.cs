@@ -5,6 +5,7 @@ using Sieve.Models;
 using Web_Shop.Application.Helpers.PagedList;
 using Web_Shop.Application.Mappings;
 using Web_Shop.Application.DTOs.Category;
+using Web_Shop.Application.Services.Interfaces;
 
 namespace Web_Shop_3.RestAPI.Controllers
 {

@@ -63,7 +63,7 @@ namespace Web_Shop.RestAPI.Controllers
                 return Problem(statusCode: (int)result.StatusCode, title: "Add error.", detail: result.ErrorMessage);
             }
 
-            return CreatedAtAction(nameof(GetCustomer), new { id = result.entity.IdCustomer }, result.entity.MapGetSingleCustomerDTO());
+            return CreatedAtAction(nameof(GetCustomer), new { id = result.entity!.IdCustomer }, result.entity.MapGetSingleCustomerDTO());
         }
 
         [HttpPut("update/{id}")]
@@ -77,7 +77,7 @@ namespace Web_Shop.RestAPI.Controllers
                 return Problem(statusCode: (int)result.StatusCode, title: "Update error.", detail: result.ErrorMessage);
             }
 
-            return StatusCode((int)result.StatusCode, result.entity.MapGetSingleCustomerDTO());
+            return StatusCode((int)result.StatusCode, result.entity!.MapGetSingleCustomerDTO());
         }
 
         [HttpGet("verifyPassword/{email}/{password}")]
@@ -91,7 +91,7 @@ namespace Web_Shop.RestAPI.Controllers
                 return Problem(statusCode: (int)result.StatusCode, title: "Read error.", detail: result.ErrorMessage);
             }
 
-            return StatusCode((int)result.StatusCode, result.entity.MapGetSingleCustomerDTO());
+            return StatusCode((int)result.StatusCode, result.entity!.MapGetSingleCustomerDTO());
         }
 
         [HttpDelete("{id}")]
