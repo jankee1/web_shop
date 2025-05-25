@@ -9,25 +9,38 @@ using Sieve.Models;
 using Web_Shop.Application.Helpers.PagedList;
 using WWSI_Shop.Persistence.MySQL.Model;
 
+using Web_Shop.Application.Utils;
+using System.Net;
+using HashidsNet;
+
 namespace Web_Shop.RestAPI.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class CustomerController : ControllerBase
+    public class CustomerController : BaseController
     {
         private readonly ICustomerService _customerService;
         private readonly ILogger<CustomerController> _logger;
 
-        public CustomerController(ILogger<CustomerController> logger, ICustomerService customerService)
+        public CustomerController(ILogger<CustomerController> logger, ICustomerService customerService, IHashids hashids) : base(hashids)
         {
             _customerService = customerService;
             _logger = logger;
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{hashid}")]
         [SwaggerOperation(OperationId = "GetCustomerById")]
-        public async Task<ActionResult<GetSingleCustomerDTO>> GetCustomer(ulong id)
+        public async Task<ActionResult<GetSingleCustomerDTO>> GetCustomer(string hashid)
         {
+            ulong id;
+            try
+            {
+                id = hashid.DecodeHashId(_hashIds);
+            }
+            catch (Exception ex)
+            {
+                return Problem(statusCode: (int)HttpStatusCode.BadRequest, title: "Hash decode error.", detail: ex.Message);
+            }
             var result = await _customerService.GetByIdAsync(id);
 
             if (!result.IsSuccess)
@@ -35,14 +48,14 @@ namespace Web_Shop.RestAPI.Controllers
                 return Problem(statusCode: (int)result.StatusCode, title: "Read error.", detail: result.ErrorMessage);
             }
 
-            return StatusCode((int)result.StatusCode, result.entity!.MapGetSingleCustomerDTO());
+            return StatusCode((int)result.StatusCode, result.entity!.MapGetSingleCustomerDTO(_hashIds));
         }
 
         [HttpGet("list")]
         [SwaggerOperation(OperationId = "GetCustomers")]
         public async Task<ActionResult<IPagedList<GetSingleCustomerDTO>>> GetCustomers([FromQuery] SieveModel paginationParams)
         {
-            var result = await _customerService.SearchAsync(paginationParams, resultEntity => DomainToDtoMapper.MapGetSingleCustomerDTO(resultEntity));
+            var result = await _customerService.SearchAsync(paginationParams, resultEntity => DomainToDtoMapper.MapGetSingleCustomerDTO(resultEntity, _hashIds));
 
             if (!result.IsSuccess)
             {
@@ -63,7 +76,7 @@ namespace Web_Shop.RestAPI.Controllers
                 return Problem(statusCode: (int)result.StatusCode, title: "Add error.", detail: result.ErrorMessage);
             }
 
-            return CreatedAtAction(nameof(GetCustomer), new { id = result.entity.IdCustomer }, result.entity.MapGetSingleCustomerDTO());
+            return CreatedAtAction(nameof(GetCustomer), new { id = result.entity!.IdCustomer }, result.entity.MapGetSingleCustomerDTO(_hashIds));
         }
 
         [HttpPut("update/{id}")]
@@ -77,7 +90,7 @@ namespace Web_Shop.RestAPI.Controllers
                 return Problem(statusCode: (int)result.StatusCode, title: "Update error.", detail: result.ErrorMessage);
             }
 
-            return StatusCode((int)result.StatusCode, result.entity.MapGetSingleCustomerDTO());
+            return StatusCode((int)result.StatusCode, result.entity!.MapGetSingleCustomerDTO(_hashIds));
         }
 
         [HttpGet("verifyPassword/{email}/{password}")]
@@ -91,7 +104,7 @@ namespace Web_Shop.RestAPI.Controllers
                 return Problem(statusCode: (int)result.StatusCode, title: "Read error.", detail: result.ErrorMessage);
             }
 
-            return StatusCode((int)result.StatusCode, result.entity.MapGetSingleCustomerDTO());
+            return StatusCode((int)result.StatusCode, result.entity!.MapGetSingleCustomerDTO(_hashIds));
         }
 
         [HttpDelete("{id}")]
