@@ -6,6 +6,7 @@ namespace Web_Shop.Persistence.UOW.Interfaces
     {
         ICustomerRepository CustomerRepository { get; }
         IProductRepository ProductRepository { get; }   
+        ICategoryRepository CategoryRepository { get; }
 
         IGenericRepository<T> Repository<T>() where T : class;
 

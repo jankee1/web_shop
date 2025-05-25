@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using HashidsNet;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Sieve.Models;
@@ -20,9 +21,23 @@ namespace Web_Shop.Application.Extensions
             {
                 configuration.GetSection("Sieve").Bind(sieveOptions);
             });
+
+            services
+                 .AddSingleton<IHashids>(_ =>
+                 {
+                     var hashIdsSalt = configuration["Secret:hashids:salt"];
+                     var hashIdsLength = int.Parse(configuration["Secret:hashids:length"]);
+                     return new Hashids(hashIdsSalt, hashIdsLength);
+                 });
+
             services
                 .AddScoped<ISieveCustomSortMethods, SieveCustomSortMethods>()
                 .AddScoped<ISieveCustomFilterMethods, SieveCustomFilterMethods>()
+                .AddScoped<ISieveProcessor, ApplicationSieveProcessor>();
+
+            services
+                .AddScoped(typeof(ICategoryService), typeof(CategoryService))
+                .AddScoped(typeof(ICustomerService), typeof(CustomerService));
                 .AddScoped<ISieveProcessor, ApplicationSieveProcessor>()
                 .AddScoped(typeof(ICustomerService), typeof(CustomerService))
                 .AddScoped(typeof(IProductService), typeof(ProductService));

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.Annotations;
-using Web_Shop_3.Application.Services.Interfaces;
 using Sieve.Models;
 using Web_Shop.Application.Helpers.PagedList;
 using Web_Shop.Application.Mappings;
