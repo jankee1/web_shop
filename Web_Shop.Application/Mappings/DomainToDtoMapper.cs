@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Web_Shop.Application.DTOs;
+using Web_Shop.Application.DTOs.Product;
 using WWSI_Shop.Persistence.MySQL.Model;
 
 namespace Web_Shop.Application.Mappings
@@ -25,6 +26,22 @@ namespace Web_Shop.Application.Mappings
             };
 
             return getSingleCustomerDTO;
+        }
+
+        public static GetSingleProductDTO MapGetSingleProductDTO(this Product domainProduct)
+        {
+            if (domainProduct == null)
+                throw new ArgumentNullException(nameof(domainProduct));
+
+            GetSingleProductDTO getSingleProductDTO = new()
+            {
+                Name = domainProduct.Name,
+                Description = domainProduct.Description,
+                Price = domainProduct.Price,
+                Sku = domainProduct.Sku,
+            };
+
+            return getSingleProductDTO;
         }
     }
 }

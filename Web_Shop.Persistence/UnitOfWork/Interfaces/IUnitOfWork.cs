@@ -5,6 +5,7 @@ namespace Web_Shop.Persistence.UOW.Interfaces
     public interface IUnitOfWork : IDisposable
     {
         ICustomerRepository CustomerRepository { get; }
+        IProductRepository ProductRepository { get; }   
 
         IGenericRepository<T> Repository<T>() where T : class;
 
