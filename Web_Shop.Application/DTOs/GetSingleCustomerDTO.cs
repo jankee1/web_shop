@@ -8,7 +8,7 @@ namespace Web_Shop.Application.DTOs
 {
     public class GetSingleCustomerDTO
     {
-        public ulong IdCustomer { get; set; }
+        public string hashIdCustomer { get; set; } = null!;
 
         public string Name { get; set; } = null!;
 

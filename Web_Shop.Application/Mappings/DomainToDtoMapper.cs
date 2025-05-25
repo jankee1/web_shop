@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HashidsNet;
 using Web_Shop.Application.DTOs;
 using Web_Shop.Application.DTOs.Product;
 using WWSI_Shop.Persistence.MySQL.Model;
@@ -12,14 +13,14 @@ namespace Web_Shop.Application.Mappings
 {
     public static class DomainToDtoMapper
     {
-        public static GetSingleCustomerDTO MapGetSingleCustomerDTO(this Customer domainCustomer)
+        public static GetSingleCustomerDTO MapGetSingleCustomerDTO(this Customer domainCustomer, IHashids hashIds)
         {
             if (domainCustomer == null)
                 throw new ArgumentNullException(nameof(domainCustomer));
 
             GetSingleCustomerDTO getSingleCustomerDTO = new()
             {
-                IdCustomer = domainCustomer.IdCustomer,
+                hashIdCustomer = domainCustomer.IdCustomer.EncodeHashId(hashIds),
                 Name = domainCustomer.Name,
                 Surname = domainCustomer.Surname,
                 Email = domainCustomer.Email,
