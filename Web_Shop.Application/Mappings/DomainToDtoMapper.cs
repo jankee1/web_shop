@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Web_Shop.Application.DTOs;
-using Web_Shop_3.Application.DTOs.CustomerDTOs;
 using Web_Shop.Application.DTOs.Product;
 using WWSI_Shop.Persistence.MySQL.Model;
+using Web_Shop.Application.DTOs.Category;
 
 namespace Web_Shop.Application.Mappings
 {

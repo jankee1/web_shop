@@ -5,7 +5,6 @@ using Web_Shop.Application.DTOs;
 using Web_Shop.Application.DTOs.Product;
 using Web_Shop.Application.Helpers.PagedList;
 using Web_Shop.Application.Mappings;
-using Web_Shop.Application.Services;
 using Web_Shop.Application.Services.Interfaces;
 
 namespace Web_Shop.RestAPI.Controllers
