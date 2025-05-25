@@ -8,6 +8,7 @@ using Web_Shop.Application.DTOs;
 using Web_Shop.Application.DTOs.Product;
 using WWSI_Shop.Persistence.MySQL.Model;
 using Web_Shop.Application.DTOs.Category;
+using Web_Shop.Application.Utils;
 
 namespace Web_Shop.Application.Mappings
 {
