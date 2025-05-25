@@ -5,11 +5,11 @@ using Sieve.Models;
 using Sieve.Services;
 using System.Net;
 using Web_Shop.Application.Services;
+using Web_Shop.Application.Services.Interfaces;
 using Web_Shop.Persistence.UOW.Interfaces;
-using Web_Shop_3.Application.Services.Interfaces;
 using WWSI_Shop.Persistence.MySQL.Model;
 
-namespace Web_Shop_3.Application.Services
+namespace Web_Shop.Application.Services
 {
     public class CategoryService : BaseService<Category>, ICategoryService
     {

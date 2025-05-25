@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Web_Shop_3.Application.DTOs.CustomerDTOs
+namespace Web_Shop.Application.DTOs.CustomerDTOs
 {
     public class GetSingleCategoryDTO
     {

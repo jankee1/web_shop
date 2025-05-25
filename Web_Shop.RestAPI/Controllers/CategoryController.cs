@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.Annotations;
-using Web_Shop_3.Application.Services.Interfaces;
 using Sieve.Models;
-using Web_Shop_3.Application.DTOs.CustomerDTOs;
 using Web_Shop.Application.Helpers.PagedList;
 using Web_Shop.Application.Mappings;
+using Web_Shop.Application.Services.Interfaces;
+using Web_Shop.Application.DTOs.CustomerDTOs;
 
 namespace Web_Shop_3.RestAPI.Controllers
 {
