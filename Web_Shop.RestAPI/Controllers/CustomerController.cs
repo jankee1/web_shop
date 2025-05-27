@@ -32,16 +32,14 @@ namespace Web_Shop.RestAPI.Controllers
         [SwaggerOperation(OperationId = "GetCustomerById")]
         public async Task<ActionResult<GetSingleCustomerDTO>> GetCustomer(string hashid)
         {
-            ulong id;
-            try
+            var validated = ValidateAndDecodeSingleId(hashid);
+
+            if(validated.Result is not null)
             {
-                id = hashid.DecodeHashId(_hashIds);
+                return validated.Result;
             }
-            catch (Exception ex)
-            {
-                return Problem(statusCode: (int)HttpStatusCode.BadRequest, title: "Hash decode error.", detail: ex.Message);
-            }
-            var result = await _customerService.GetByIdAsync(id);
+
+            var result = await _customerService.GetByIdAsync(validated.Value);
 
             if (!result.IsSuccess)
             {
@@ -79,11 +77,18 @@ namespace Web_Shop.RestAPI.Controllers
             return CreatedAtAction(nameof(GetCustomer), new { id = result.entity!.IdCustomer }, result.entity.MapGetSingleCustomerDTO(_hashIds));
         }
 
-        [HttpPut("update/{id}")]
+        [HttpPut("update/{hashid}")]
         [SwaggerOperation(OperationId = "UpdateCustomer")]
-        public async Task<ActionResult<GetSingleCustomerDTO>> UpdateCustomer(ulong id, [FromBody] AddUpdateCustomerDTO dto)
+        public async Task<ActionResult<GetSingleCustomerDTO>> UpdateCustomer(string hashid, [FromBody] AddUpdateCustomerDTO dto)
         {
-            var result = await _customerService.UpdateExistingCustomerAsync(dto, id);
+            var validated = ValidateAndDecodeSingleId(hashid);
+
+            if (validated.Result is not null)
+            {
+                return validated.Result;
+            }
+
+            var result = await _customerService.UpdateExistingCustomerAsync(dto, validated.Value);
 
             if (!result.IsSuccess)
             {
@@ -107,11 +112,18 @@ namespace Web_Shop.RestAPI.Controllers
             return StatusCode((int)result.StatusCode, result.entity!.MapGetSingleCustomerDTO(_hashIds));
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{hashid}")]
         [SwaggerOperation(OperationId = "DeleteCustomer")]
-        public async Task<IActionResult> DeleteCustomer(ulong id)
+        public async Task<IActionResult> DeleteCustomer(string hashid)
         {
-            var result = await _customerService.DeleteAndSaveAsync(id);
+            var validated = ValidateAndDecodeSingleId(hashid);
+
+            if (validated.Result is not null)
+            {
+                return validated.Result;
+            }
+
+            var result = await _customerService.DeleteAndSaveAsync(validated.Value);
 
             if (!result.IsSuccess)
             {

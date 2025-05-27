@@ -40,7 +40,6 @@ namespace Web_Shop.Application.Mappings
                 Description = dtoProduct.Description,
                 Price = dtoProduct.Price,
                 Sku = dtoProduct.Sku,
-                //IdCategories = dtoProduct.IdCategories @TODO 
             };
 
             return domainProduct;

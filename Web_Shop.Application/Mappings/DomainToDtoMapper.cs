@@ -31,14 +31,14 @@ namespace Web_Shop.Application.Mappings
             return getSingleCustomerDTO;
         }
 
-        public static GetSingleCategoryDTO MapGetSingleCategoryDTO(this Category domainCategory)
+        public static GetSingleCategoryDTO MapGetSingleCategoryDTO(this Category domainCategory, IHashids hashIds)
         {
             if (domainCategory == null)
                 throw new ArgumentNullException(nameof(domainCategory));
 
             GetSingleCategoryDTO getSingleCategoryDTO = new()
             {
-                IdCategory = domainCategory.IdCategory,
+                IdCategory = domainCategory.IdCategory.EncodeHashId(hashIds),
                 Name = domainCategory.Name,
                 Description = domainCategory.Description,
             };
@@ -46,18 +46,26 @@ namespace Web_Shop.Application.Mappings
             return getSingleCategoryDTO;
         }
 
-        public static GetSingleProductDTO MapGetSingleProductDTO(this Product domainProduct)
+        public static GetSingleProductDTO MapGetSingleProductDTO(this Product domainProduct, IHashids hashIds)
         {
             if (domainProduct == null)
                 throw new ArgumentNullException(nameof(domainProduct));
 
             GetSingleProductDTO getSingleProductDTO = new()
             {
+                ProductId = domainProduct.IdProduct.EncodeHashId(hashIds),
                 Name = domainProduct.Name,
                 Description = domainProduct.Description,
                 Price = domainProduct.Price,
                 Sku = domainProduct.Sku,
             };
+
+            if(domainProduct.IdCategories != null && domainProduct.IdCategories.Count != 0)
+            {
+                getSingleProductDTO.Category = domainProduct.IdCategories
+                    .Select(c => c.MapGetSingleCategoryDTO(hashIds))
+                    .ToList();
+            }
 
             return getSingleProductDTO;
         }

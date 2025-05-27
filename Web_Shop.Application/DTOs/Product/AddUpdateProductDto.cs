@@ -7,8 +7,8 @@ using WWSI_Shop.Persistence.MySQL.Model;
 
 namespace Web_Shop.Application.DTOs.Product
 {
-    public class AddUpdateProductDto : GetSingleProductDTO
+    public class AddUpdateProductDto : AbstractProductDto
     {
-        public virtual ICollection<String> IdCategories { get; set; } = new List<String>();
+        public virtual ICollection<string> IdCategories { get; set; } = new List<string>();
     }
 }
