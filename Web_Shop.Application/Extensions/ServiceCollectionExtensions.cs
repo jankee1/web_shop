@@ -26,7 +26,7 @@ namespace Web_Shop.Application.Extensions
                  .AddSingleton<IHashids>(_ =>
                  {
                      var hashIdsSalt = configuration["Secret:hashids:salt"];
-                     var hashIdsLength = int.Parse(configuration["Secret:hashids:length"]);
+                     var hashIdsLength = int.Parse(configuration["Secret:hashids:length"]!);
                      return new Hashids(hashIdsSalt, hashIdsLength);
                  });
 
@@ -37,7 +37,10 @@ namespace Web_Shop.Application.Extensions
 
             services
                 .AddScoped(typeof(ICategoryService), typeof(CategoryService))
-                .AddScoped(typeof(ICustomerService), typeof(CustomerService));
+                .AddScoped(typeof(ICustomerService), typeof(CustomerService))
+                .AddScoped<ISieveProcessor, ApplicationSieveProcessor>()
+                .AddScoped(typeof(ICustomerService), typeof(CustomerService))
+                .AddScoped(typeof(IProductService), typeof(ProductService));
 
             services.AddScoped<IValidator<AddUpdateCustomerDTO>, AddUpdateCustomerDTOValidator>();
         }

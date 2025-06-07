@@ -5,9 +5,9 @@ namespace WWSI_Shop.Persistence.MySQL.Model;
 
 public partial class Category
 {
-    public uint IdCategory { get; set; }
+    public ulong IdCategory { get; set; }
 
-    public uint? ParentIdCategory { get; set; }
+    public ulong? ParentIdCategory { get; set; }
 
     public string Name { get; set; } = null!;
 

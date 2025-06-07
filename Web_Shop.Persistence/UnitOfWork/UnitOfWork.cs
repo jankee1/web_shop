@@ -13,6 +13,7 @@ namespace Web_Shop.Persistence.UOW
         private bool disposed;
 
         public ICustomerRepository CustomerRepository { get; private set; }
+        public IProductRepository ProductRepository { get; private set; }
         public ICategoryRepository CategoryRepository { get; private set; }
 
         public UnitOfWork(WwsishopContext dbContext)
@@ -21,6 +22,7 @@ namespace Web_Shop.Persistence.UOW
             _repositories = new Hashtable();
 
             CustomerRepository = new CustomerRepository(_dbContext);
+            ProductRepository = new ProductRepository(_dbContext);
             CategoryRepository = new CategoryRepository(_dbContext);
         }
 

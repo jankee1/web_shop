@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Web_Shop.Application.DTOs;
+using Web_Shop.Application.DTOs.Product;
 using WWSI_Shop.Persistence.MySQL.Model;
 using BC = BCrypt.Net.BCrypt;
 
@@ -26,6 +27,22 @@ namespace Web_Shop.Application.Mappings
             };
 
             return domainCustomer;
+        }
+
+        public static Product MapProduct(this AddUpdateProductDto dtoProduct)
+        {
+            if (dtoProduct == null)
+                throw new ArgumentNullException(nameof(dtoProduct));
+
+            Product domainProduct = new()
+            {
+                Name = dtoProduct.Name,
+                Description = dtoProduct.Description,
+                Price = dtoProduct.Price,
+                Sku = dtoProduct.Sku,
+            };
+
+            return domainProduct;
         }
     }
 }
