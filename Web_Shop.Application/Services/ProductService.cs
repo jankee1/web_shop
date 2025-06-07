@@ -32,7 +32,6 @@ namespace Web_Shop.Application.Services
         {
             try
             {
-                var newEntity = dto.MapProduct();
                 var categories = await _unitOfWork.CategoryRepository.WithoutTracking().GetManyByIdAsync<ulong>(categoryIds, cat => cat.IdCategory);
 
                 if(categoryIds.Count != categories.Count)
@@ -41,12 +40,8 @@ namespace Web_Shop.Application.Services
                     return (false, null, HttpStatusCode.NotFound, "Category IDs not found: " + string.Join(", ", missingIds));
                 }
 
-                foreach (var category in categories)
-                {
-                    newEntity.IdCategories.Add(category);
-                }
-
-                var result = await AddAndSaveAsync(newEntity);
+                var entity = dto.MapProduct();
+                var result = await AddAndSaveAsync(AssignIdCategories(entity, categories));
 
                 return (true, result.entity, HttpStatusCode.OK, string.Empty);
             }
@@ -75,17 +70,11 @@ namespace Web_Shop.Application.Services
                     return (false, null, HttpStatusCode.NotFound, "Category IDs not found: " + string.Join(", ", missingIds));
                 }
 
-                var updatedEntity = dto.MapProduct();
-                updatedEntity.IdProduct = id;
+                var entity = dto.MapProduct();
+                entity.IdProduct = id;
+                var updatedEntity = AssignIdCategories(entity, categories);
 
-                foreach (var category in categories)
-                {
-                    updatedEntity.IdCategories.Add(category);
-                }
-
-                var result = await UpdateAndSaveAsync(updatedEntity, id);
-
-                return (true, result.entity, HttpStatusCode.OK, string.Empty);
+                return await UpdateAndSaveAsync(updatedEntity, id);
             }
             catch (Exception ex)
             {
@@ -126,5 +115,15 @@ namespace Web_Shop.Application.Services
 
             return (true, productEntity, HttpStatusCode.OK, string.Empty);
         }
+
+        private Product AssignIdCategories(Product product, ICollection<Category> categories)
+        {
+            foreach (var category in categories)
+            {
+                product.IdCategories.Add(category);
+            }
+
+            return product;
+        }
     }
-}
+    }
